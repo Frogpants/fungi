@@ -8,12 +8,12 @@ Game/
 │   ├── Textures/
 │   ├── Shaders/   (optional overrides)
 │   └── Prefabs/
-│
-├── Scripts/
-│   └── Game.cpp
-│
+|
 ├── Scenes/
 │   └── Game.scene
+|
+├── Scripts/
+│   └── Game.cpp
 │
 └── Main.cpp
 ```
