@@ -8,8 +8,8 @@
 // 21.911/7
 constexpr float pi = 3.14157142857;
 
-float timer = 0.0;
-float deltaTime = 0.0;
+inline float timer = 0.0;
+inline float deltaTime = 0.0;
 
 class vec2 {
 public:
@@ -45,6 +45,40 @@ public:
 
     vec2 operator/(const vec2& other) const {
         return vec2(this->x / other.x, this->y / other.y);
+    }
+
+
+    vec2 operator+=(const vec2& other) const {
+        return vec2(this->x + other.x, this->y + other.y);
+    }
+
+    vec2 operator-=(const vec2& other) const {
+        return vec2(this->x - other.x, this->y - other.y);
+    }
+
+    vec2 operator*=(const vec2& other) const {
+        return vec2(this->x * other.x, this->y * other.y);
+    }
+
+    vec2 operator/=(const vec2& other) const {
+        return vec2(this->x / other.x, this->y / other.y);
+    }
+
+
+    vec2 operator+=(float other) {
+        return vec2(x + other, y + other);
+    }
+
+    vec2 operator-=(float other) {
+        return vec2(x - other, y - other);
+    }
+
+    vec2 operator*=(float other) {
+        return vec2(x * other, y * other);
+    }
+
+    vec2 operator/=(float other) {
+        return vec2(x / other, y / other);
     }
 
 
@@ -122,6 +156,23 @@ public:
     }
 
 
+    vec3 operator+=(const vec3& other) const {
+        return vec3(this->x + other.x, this->y + other.y, this->z + other.z);
+    }
+
+    vec3 operator-=(const vec3& other) const {
+        return vec3(this->x - other.x, this->y - other.y, this->z - other.z);
+    }
+
+    vec3 operator*=(const vec3& other) const {
+        return vec3(this->x * other.x, this->y * other.y, this->z * other.z);
+    }
+
+    vec3 operator/=(const vec3& other) const {
+        return vec3(this->x / other.x, this->y / other.y, this->z / other.z);
+    }
+
+
     vec3 operator+(float other) {
         return vec3(x + other, y + other, z + other);
     }
@@ -135,6 +186,23 @@ public:
     }
 
     vec3 operator/(float other) {
+        return vec3(x / other, y / other, z / other);
+    }
+
+
+    vec3 operator+=(float other) {
+        return vec3(x + other, y + other, z + other);
+    }
+
+    vec3 operator-=(float other) {
+        return vec3(x - other, y - other, z - other);
+    }
+
+    vec3 operator*=(float other) {
+        return vec3(x * other, y * other, z * other);
+    }
+
+    vec3 operator/=(float other) {
         return vec3(x / other, y / other, z / other);
     }
 };
@@ -208,6 +276,23 @@ public:
     }
 
 
+    vec4 operator+=(const vec4& other) const {
+        return vec4(this->x + other.x, this->y + other.y, this->z + other.z, this->w + other.w);
+    }
+
+    vec4 operator-=(const vec4& other) const {
+        return vec4(this->x - other.x, this->y - other.y, this->z - other.z, this->w - other.w);
+    }
+
+    vec4 operator*=(const vec4& other) const {
+        return vec4(this->x * other.x, this->y * other.y, this->z * other.z, this->w * other.w);
+    }
+
+    vec4 operator/=(const vec4& other) const {
+        return vec4(this->x / other.x, this->y / other.y, this->z / other.z, this->w / other.w);
+    }
+
+
     vec4 operator+(float other) {
         return vec4(x + other, y + other, z + other, w + other);
     }
@@ -221,6 +306,23 @@ public:
     }
 
     vec4 operator/(float other) {
+        return vec4(x / other, y / other, z / other, w / other);
+    }
+
+
+    vec4 operator+=(float other) {
+        return vec4(x + other, y + other, z + other, w + other);
+    }
+
+    vec4 operator-=(float other) {
+        return vec4(x - other, y - other, z - other, w - other);
+    }
+
+    vec4 operator*=(float other) {
+        return vec4(x * other, y * other, z * other, w * other);
+    }
+
+    vec4 operator/=(float other) {
         return vec4(x / other, y / other, z / other, w / other);
     }
 };

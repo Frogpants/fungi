@@ -1,6 +1,6 @@
+#include <glad/glad.h>
 #include "render.hpp"
 #include "projection.hpp"
-#include <glad/glad.h>
 
 static vec2 ToNDC(vec2 p, int width, int height) {
     return {
