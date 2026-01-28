@@ -2,19 +2,19 @@
 
 ### Folder Hierarchy
 ```
-Game/
-├── Assets/
-│   ├── Models/
-│   ├── Textures/
-│   ├── Shaders/   (optional overrides)
-│   └── Prefabs/
+src/
+├── core/
+│   └── essentials.hpp
 |
-├── Scenes/
-│   └── Game.scene
+├── physics/
+│   └── Physics.cpp
 |
-├── Scripts/
+├── game/
 │   └── Game.cpp
 │
+├── renderer/
+│   └── shaders/
+|
 └── Main.cpp
 ```
 
