@@ -1,6 +1,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <vector>
+
+#include "./renderer/render.hpp"
+#include "projection.hpp"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
@@ -10,9 +14,14 @@ void Update(float deltaTime) {
     // still need to code
 }
 
-void Render() {
-    glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+std::vector<Triangle> scene;
+
+void Render(GLFWwindow* win) {
+    int width, height;
+    glfwGetFramebufferSize(win, &width, &height);
+
+    UpdVals();
+    RenderFrame(scene, width, height);
 }
 
 int main() {
@@ -27,7 +36,7 @@ int main() {
 
     GLFWwindow* window = glfwCreateWindow(
         1280, 720,
-        "My Engine",
+        "Mama's Bakeria",
         nullptr,
         nullptr
     );
@@ -59,7 +68,7 @@ int main() {
         glfwPollEvents();
 
         Update(deltaTime);
-        Render();
+        Render(window);
 
         glfwSwapBuffers(window);
     }
