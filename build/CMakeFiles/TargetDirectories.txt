@@ -1,4 +1,5 @@
 /home/spenc/mystuff/fungi/build/CMakeFiles/MyEngine.dir
+/home/spenc/mystuff/fungi/build/CMakeFiles/copy_shaders.dir
 /home/spenc/mystuff/fungi/build/CMakeFiles/edit_cache.dir
 /home/spenc/mystuff/fungi/build/CMakeFiles/rebuild_cache.dir
 /home/spenc/mystuff/fungi/build/CMakeFiles/list_install_components.dir

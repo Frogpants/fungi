@@ -175,6 +175,19 @@ MyEngine/fast:
 .PHONY : MyEngine/fast
 
 #=============================================================================
+# Target rules for targets named copy_shaders
+
+# Build rule for target.
+copy_shaders: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 copy_shaders
+.PHONY : copy_shaders
+
+# fast build rule for target.
+copy_shaders/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/copy_shaders.dir/build.make CMakeFiles/copy_shaders.dir/build
+.PHONY : copy_shaders/fast
+
+#=============================================================================
 # Target rules for targets named uninstall
 
 # Build rule for target.
@@ -700,6 +713,7 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
+	@echo "... copy_shaders"
 	@echo "... glad-generate-files"
 	@echo "... uninstall"
 	@echo "... update_mappings"

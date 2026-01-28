@@ -1,18 +1,28 @@
 #version 330 core
 
-in vec2 uv;
 out vec4 FragColor;
+in vec2 vUV;
 
 uniform sampler2D screenTexture;
-uniform vec2 resolution;
 uniform float time;
+uniform vec2 resolution;
 
 void main() {
-    vec3 color = texture(screenTexture, uv).rgb;
+    vec2 uv = vUV;
 
-    // Example: subtle vignette
-    vec2 p = uv * 2.0 - 1.0;
-    float vignette = 1.0 - dot(p, p) * 0.3;
+    uv -= 0.5;
+    uv *= 1.0 + 0.02 * length(uv);
+    uv += 0.5;
 
-    FragColor = vec4(color * vignette, 1.0);
+    vec3 color = texture(screenTexture, uv).rgb * vec3(uv*cos(time*0.5), sin(time));
+
+    // Slight vignette
+    float vignette = smoothstep(0.9, 0.4, length(vUV - 0.5));
+    color *= vignette;
+
+    // Simple color grading
+    color = pow(color, vec3(1.1)); // gamma
+    color *= vec3(1.05, 1.0, 0.95); // warm tint
+
+    FragColor = vec4(color, 1.0);
 }

@@ -10,7 +10,7 @@ static vec2 ToNDC(vec2 p, int width, int height) {
 }
 
 void RenderFrame(const std::vector<Triangle>& tris, int width, int height) {
-    glClearColor(0.1f, 0.1f, 0.12f, 1.0f);
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glBegin(GL_LINES);

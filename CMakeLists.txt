@@ -35,3 +35,27 @@ target_link_libraries(MyEngine PRIVATE glfw glad)
 if (UNIX AND NOT APPLE)
     target_link_libraries(MyEngine PRIVATE dl)
 endif()
+
+# ---------------------------------
+# Shader auto-copy (NEW)
+# ---------------------------------
+
+# Shader source directory (inside src)
+set(SHADER_SRC_DIR ${CMAKE_SOURCE_DIR}/src/renderer/shaders)
+
+# Shader destination directory (next to executable)
+set(SHADER_DST_DIR ${CMAKE_BINARY_DIR}/renderer/shaders)
+
+# Ensure destination exists
+file(MAKE_DIRECTORY ${SHADER_DST_DIR})
+
+# Copy shaders every build (only updates changed files)
+add_custom_target(copy_shaders ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${SHADER_SRC_DIR}
+            ${SHADER_DST_DIR}
+    COMMENT "Copying shaders to build directory"
+)
+
+# Ensure shaders are copied before the executable runs
+add_dependencies(MyEngine copy_shaders)

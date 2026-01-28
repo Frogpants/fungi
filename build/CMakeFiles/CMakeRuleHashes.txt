@@ -1,4 +1,5 @@
 # Hashes of file build rules.
+c692aaa71030032b874c8c1c910430bd CMakeFiles/copy_shaders
 825eeac894ed3a30cb5272571b8c428b _deps/glad-build/CMakeFiles/glad-generate-files
 49bb97d510768ce7af53b6f12200e82c _deps/glad-build/include/glad/glad.h
 c2012235f6db6fab016b3e2a35802564 _deps/glfw-build/CMakeFiles/uninstall

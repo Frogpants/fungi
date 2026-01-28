@@ -10,12 +10,11 @@
 #include "./renderer/projection.hpp"
 
 /* ===============================
-   File / Shader Utilities
+   File Utilities
 ================================ */
 
 std::string LoadFile(const char* path) {
     std::ifstream file(path);
-
     if (!file.is_open()) {
         std::cerr << "FAILED TO OPEN FILE: " << path << std::endl;
         return "";
@@ -23,21 +22,16 @@ std::string LoadFile(const char* path) {
 
     std::stringstream buffer;
     buffer << file.rdbuf();
-
-    std::string src = buffer.str();
-    std::cout << "Loaded: " << path
-              << " (" << src.size() << " bytes)\n";
-
-    return src;
+    return buffer.str();
 }
+
+/* ===============================
+   Shader Utilities
+================================ */
 
 GLuint CompileShader(const char* path, GLenum type) {
     std::string src = LoadFile(path);
-
-    if (src.empty()) {
-        std::cerr << "EMPTY SHADER SOURCE: " << path << std::endl;
-        return 0;
-    }
+    if (src.empty()) return 0;
 
     const char* csrc = src.c_str();
     GLuint shader = glCreateShader(type);
@@ -49,21 +43,17 @@ GLuint CompileShader(const char* path, GLenum type) {
     if (!ok) {
         char log[1024];
         glGetShaderInfoLog(shader, 1024, nullptr, log);
-        std::cerr << "SHADER COMPILE ERROR (" << path << "):\n"
-                  << log << std::endl;
+        std::cerr << "SHADER COMPILE ERROR (" << path << "):\n" << log << std::endl;
     }
 
     return shader;
 }
 
-GLuint CreateShaderProgram(const char* vertPath, const char* fragPath) {
-    GLuint vs = CompileShader(vertPath, GL_VERTEX_SHADER);
-    GLuint fs = CompileShader(fragPath, GL_FRAGMENT_SHADER);
+GLuint CreateShaderProgram(const char* vert, const char* frag) {
+    GLuint vs = CompileShader(vert, GL_VERTEX_SHADER);
+    GLuint fs = CompileShader(frag, GL_FRAGMENT_SHADER);
 
-    if (!vs || !fs) {
-        std::cerr << "Shader creation failed\n";
-        return 0;
-    }
+    if (!vs || !fs) return 0;
 
     GLuint program = glCreateProgram();
     glAttachShader(program, vs);
@@ -91,7 +81,7 @@ GLuint CreateShaderProgram(const char* vertPath, const char* fragPath) {
 GLuint postShader = 0;
 GLuint sceneFBO = 0;
 GLuint sceneTexture = 0;
-GLuint emptyVAO = 0;
+GLuint fullscreenVAO = 0;
 
 std::vector<Triangle> scene;
 
@@ -118,8 +108,7 @@ void InitFramebuffer(int w, int h) {
     glGenTextures(1, &sceneTexture);
     glBindTexture(GL_TEXTURE_2D, sceneTexture);
     glTexImage2D(
-        GL_TEXTURE_2D,
-        0,
+        GL_TEXTURE_2D, 0,
         GL_RGB,
         w, h,
         0,
@@ -143,7 +132,9 @@ void InitFramebuffer(int w, int h) {
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    glGenVertexArrays(1, &emptyVAO);
+    // Fullscreen triangle VAO (no VBO needed)
+    glGenVertexArrays(1, &fullscreenVAO);
+    glBindVertexArray(fullscreenVAO);
 }
 
 /* ===============================
@@ -166,6 +157,7 @@ void Render(GLFWwindow* window) {
 
     /* ---- Post process to screen ---- */
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glViewport(0, 0, w, h);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glUseProgram(postShader);
@@ -173,32 +165,25 @@ void Render(GLFWwindow* window) {
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, sceneTexture);
-    glUniform1i(
-        glGetUniformLocation(postShader, "screenTexture"),
-        0
-    );
+    glUniform1i(glGetUniformLocation(postShader, "screenTexture"), 0);
+    glUniform2f(glGetUniformLocation(postShader, "resolution"), (float)w, (float)h);
+    glUniform1f(glGetUniformLocation(postShader, "time"), (float)glfwGetTime());
 
-    glUniform2f(
-        glGetUniformLocation(postShader, "resolution"),
-        (float)w, (float)h
-    );
-
-    glUniform1f(
-        glGetUniformLocation(postShader, "time"),
-        (float)glfwGetTime()
-    );
-
-    glBindVertexArray(emptyVAO);
+    glBindVertexArray(fullscreenVAO);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
 /* ===============================
-   Main
+   GLFW
 ================================ */
 
 void framebuffer_size_callback(GLFWwindow*, int w, int h) {
     glViewport(0, 0, w, h);
 }
+
+/* ===============================
+   Main
+================================ */
 
 int main() {
     if (!glfwInit()) {
@@ -234,7 +219,7 @@ int main() {
     );
 
     if (!postShader) {
-        std::cerr << "Post shader failed to load\n";
+        std::cerr << "Post shader failed\n";
         return -1;
     }
 
@@ -243,13 +228,7 @@ int main() {
     InitFramebuffer(w, h);
     InitScene();
 
-    float last = (float)glfwGetTime();
-
     while (!glfwWindowShouldClose(window)) {
-        float now = (float)glfwGetTime();
-        deltaTime = now - last;
-        last = now;
-
         glfwPollEvents();
         Render(window);
         glfwSwapBuffers(window);
