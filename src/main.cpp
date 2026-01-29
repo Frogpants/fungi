@@ -9,9 +9,9 @@
 #include "./renderer/render.hpp"
 #include "./renderer/projection.hpp"
 
-/* ===============================
-   File Utilities
-================================ */
+#include "./game/manager.hpp"
+
+
 
 std::string LoadFile(const char* path) {
     std::ifstream file(path);
@@ -25,9 +25,6 @@ std::string LoadFile(const char* path) {
     return buffer.str();
 }
 
-/* ===============================
-   Shader Utilities
-================================ */
 
 GLuint CompileShader(const char* path, GLenum type) {
     std::string src = LoadFile(path);
@@ -74,9 +71,6 @@ GLuint CreateShaderProgram(const char* vert, const char* frag) {
     return program;
 }
 
-/* ===============================
-   Globals
-================================ */
 
 GLuint postShader = 0;
 GLuint sceneFBO = 0;
@@ -85,9 +79,6 @@ GLuint fullscreenVAO = 0;
 
 std::vector<Triangle> scene;
 
-/* ===============================
-   Scene
-================================ */
 
 void InitScene() {
     scene.push_back({
@@ -97,9 +88,7 @@ void InitScene() {
     });
 }
 
-/* ===============================
-   Framebuffer
-================================ */
+
 
 void InitFramebuffer(int w, int h) {
     glGenFramebuffers(1, &sceneFBO);
@@ -132,14 +121,10 @@ void InitFramebuffer(int w, int h) {
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    // Fullscreen triangle VAO (no VBO needed)
     glGenVertexArrays(1, &fullscreenVAO);
     glBindVertexArray(fullscreenVAO);
 }
 
-/* ===============================
-   Rendering
-================================ */
 
 void Render(GLFWwindow* window) {
     int w, h;
@@ -147,7 +132,6 @@ void Render(GLFWwindow* window) {
 
     UpdVals();
 
-    /* ---- Render scene to texture ---- */
     glBindFramebuffer(GL_FRAMEBUFFER, sceneFBO);
     glViewport(0, 0, w, h);
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -155,7 +139,6 @@ void Render(GLFWwindow* window) {
 
     RenderFrame(scene, w, h);
 
-    /* ---- Post process to screen ---- */
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, w, h);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -168,22 +151,19 @@ void Render(GLFWwindow* window) {
     glUniform1i(glGetUniformLocation(postShader, "screenTexture"), 0);
     glUniform2f(glGetUniformLocation(postShader, "resolution"), (float)w, (float)h);
     glUniform1f(glGetUniformLocation(postShader, "time"), (float)glfwGetTime());
+    glUniform1f(glGetUniformLocation(postShader, "gamemode"), gamemode);
 
     glBindVertexArray(fullscreenVAO);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
-/* ===============================
-   GLFW
-================================ */
+
 
 void framebuffer_size_callback(GLFWwindow*, int w, int h) {
     glViewport(0, 0, w, h);
 }
 
-/* ===============================
-   Main
-================================ */
+
 
 int main() {
     if (!glfwInit()) {
