@@ -5,7 +5,9 @@ CMakeFiles/MyEngine.dir/src/main.cpp.o: /home/spenc/mystuff/fungi/src/main.cpp \
   _deps/glad-build/include/KHR/khrplatform.h \
   _deps/glad-build/include/glad/glad.h \
   _deps/glfw-src/include/GLFW/glfw3.h \
+  /home/spenc/mystuff/fungi/src/core/essentials.hpp \
   /home/spenc/mystuff/fungi/src/game/manager.hpp \
+  /home/spenc/mystuff/fungi/src/game/models.hpp \
   /home/spenc/mystuff/fungi/src/core/essentials.hpp \
   /home/spenc/mystuff/fungi/src/renderer/camera.hpp \
   /home/spenc/mystuff/fungi/src/renderer/projection.hpp \
@@ -737,6 +739,8 @@ CMakeFiles/MyEngine.dir/src/renderer/render.cpp.o: /home/spenc/mystuff/fungi/src
 
 /usr/include/c++/13/bits/locale_classes.h:
 
+/usr/include/c++/13/bits/ios_base.h:
+
 /usr/include/c++/13/type_traits:
 
 /usr/include/c++/13/tr1/hypergeometric.tcc:
@@ -769,34 +773,6 @@ CMakeFiles/MyEngine.dir/src/renderer/render.cpp.o: /home/spenc/mystuff/fungi/src
 
 /usr/include/aarch64-linux-gnu/bits/sched.h:
 
-/usr/include/aarch64-linux-gnu/bits/types/__locale_t.h:
-
-/usr/include/aarch64-linux-gnu/bits/floatn-common.h:
-
-/usr/include/c++/13/bits/move.h:
-
-/usr/include/aarch64-linux-gnu/bits/cpu-set.h:
-
-/usr/include/c++/13/initializer_list:
-
-/usr/include/aarch64-linux-gnu/c++/13/bits/atomic_word.h:
-
-/usr/include/aarch64-linux-gnu/asm/errno.h:
-
-/usr/include/c++/13/bits/locale_facets.h:
-
-/usr/include/aarch64-linux-gnu/bits/pthreadtypes-arch.h:
-
-/home/spenc/mystuff/fungi/src/main.cpp:
-
-/usr/include/linux/errno.h:
-
-/usr/include/aarch64-linux-gnu/bits/types/error_t.h:
-
-/home/spenc/mystuff/fungi/src/physics/box.hpp:
-
-/usr/include/c++/13/bits/hash_bytes.h:
-
 /usr/include/aarch64-linux-gnu/bits/byteswap.h:
 
 /usr/include/aarch64-linux-gnu/bits/atomic_wide_counter.h:
@@ -808,6 +784,58 @@ CMakeFiles/MyEngine.dir/src/renderer/render.cpp.o: /home/spenc/mystuff/fungi/src
 /usr/include/aarch64-linux-gnu/bits/timesize.h:
 
 /usr/include/aarch64-linux-gnu/bits/select.h:
+
+/usr/include/aarch64-linux-gnu/bits/floatn-common.h:
+
+/usr/include/aarch64-linux-gnu/bits/types/__locale_t.h:
+
+/usr/include/c++/13/bits/basic_ios.tcc:
+
+/usr/include/aarch64-linux-gnu/bits/long-double.h:
+
+/usr/include/aarch64-linux-gnu/bits/libc-header-start.h:
+
+/usr/include/aarch64-linux-gnu/bits/fp-fast.h:
+
+/usr/include/c++/13/ios:
+
+/usr/include/aarch64-linux-gnu/bits/types/clock_t.h:
+
+/usr/include/c++/13/bits/stl_bvector.h:
+
+/usr/include/c++/13/bits/allocator.h:
+
+/usr/include/c++/13/bits/ostream_insert.h:
+
+/usr/include/aarch64-linux-gnu/bits/stdint-uintn.h:
+
+/usr/include/aarch64-linux-gnu/bits/types/__FILE.h:
+
+/usr/include/aarch64-linux-gnu/bits/types/mbstate_t.h:
+
+/usr/include/c++/13/tuple:
+
+/usr/include/aarch64-linux-gnu/bits/stdio_lim.h:
+
+/usr/include/features.h:
+
+/usr/include/aarch64-linux-gnu/c++/13/bits/c++allocator.h:
+
+/usr/include/features-time64.h:
+
+/usr/include/c++/13/string_view:
+
+/usr/include/aarch64-linux-gnu/c++/13/bits/c++locale.h:
+
+/usr/include/aarch64-linux-gnu/bits/mathcalls-narrow.h:
+
+/usr/include/c++/13/tr1/riemann_zeta.tcc:
+
+/usr/include/c++/13/ostream:
+
+/usr/include/c++/13/bits/streambuf_iterator.h:
+
+/home/spenc/mystuff/fungi/src/game/manager.hpp:
 
 /usr/include/aarch64-linux-gnu/bits/types.h:
 
@@ -839,21 +867,29 @@ CMakeFiles/MyEngine.dir/src/renderer/render.cpp.o: /home/spenc/mystuff/fungi/src
 
 /usr/include/aarch64-linux-gnu/gnu/stubs.h:
 
-/usr/include/c++/13/ios:
+/usr/include/c++/13/initializer_list:
 
-/usr/include/aarch64-linux-gnu/bits/types/clock_t.h:
+/usr/include/aarch64-linux-gnu/c++/13/bits/atomic_word.h:
 
-/usr/include/c++/13/bits/stl_bvector.h:
+/usr/include/aarch64-linux-gnu/asm/errno.h:
 
-/usr/include/c++/13/bits/allocator.h:
+/usr/include/c++/13/bits/locale_facets.h:
 
-/usr/include/c++/13/bits/ostream_insert.h:
+/usr/include/aarch64-linux-gnu/bits/pthreadtypes-arch.h:
 
-/usr/include/aarch64-linux-gnu/bits/stdint-uintn.h:
+/home/spenc/mystuff/fungi/src/main.cpp:
 
-/usr/include/aarch64-linux-gnu/bits/types/__FILE.h:
+/usr/include/linux/errno.h:
 
-/usr/include/aarch64-linux-gnu/bits/types/mbstate_t.h:
+/usr/include/aarch64-linux-gnu/bits/types/error_t.h:
+
+/home/spenc/mystuff/fungi/src/physics/box.hpp:
+
+/usr/include/c++/13/bits/hash_bytes.h:
+
+/usr/include/c++/13/bits/move.h:
+
+/usr/include/aarch64-linux-gnu/bits/cpu-set.h:
 
 /usr/include/c++/13/ext/numeric_traits.h:
 
@@ -864,6 +900,12 @@ CMakeFiles/MyEngine.dir/src/renderer/render.cpp.o: /home/spenc/mystuff/fungi/src
 /home/spenc/mystuff/fungi/src/renderer/camera.hpp:
 
 /usr/include/aarch64-linux-gnu/c++/13/bits/c++io.h:
+
+/usr/include/c++/13/typeinfo:
+
+/usr/include/aarch64-linux-gnu/bits/timex.h:
+
+/usr/include/c++/13/bits/cxxabi_init_exception.h:
 
 /usr/include/c++/13/streambuf:
 
@@ -891,29 +933,11 @@ _deps/glad-build/include/KHR/khrplatform.h:
 
 /usr/include/aarch64-linux-gnu/bits/endianness.h:
 
-/usr/include/stdint.h:
-
-/usr/include/aarch64-linux-gnu/bits/types/cookie_io_functions_t.h:
-
 _deps/glfw-src/include/GLFW/glfw3.h:
 
 /usr/include/aarch64-linux-gnu/bits/errno.h:
 
 /usr/include/aarch64-linux-gnu/bits/types/timer_t.h:
-
-/usr/include/aarch64-linux-gnu/bits/libc-header-start.h:
-
-/usr/include/aarch64-linux-gnu/bits/long-double.h:
-
-/usr/include/aarch64-linux-gnu/bits/fp-fast.h:
-
-/usr/include/c++/13/typeinfo:
-
-/usr/include/c++/13/bits/cxxabi_init_exception.h:
-
-/usr/include/aarch64-linux-gnu/bits/timex.h:
-
-/usr/include/c++/13/bits/basic_ios.tcc:
 
 /usr/include/aarch64-linux-gnu/bits/math-vector.h:
 
@@ -937,29 +961,9 @@ _deps/glfw-src/include/GLFW/glfw3.h:
 
 /usr/include/aarch64-linux-gnu/bits/mathcalls-helper-functions.h:
 
-/usr/include/c++/13/tuple:
+/usr/include/stdint.h:
 
-/usr/include/aarch64-linux-gnu/bits/stdio_lim.h:
-
-/usr/include/features.h:
-
-/usr/include/aarch64-linux-gnu/c++/13/bits/c++allocator.h:
-
-/usr/include/features-time64.h:
-
-/usr/include/c++/13/string_view:
-
-/usr/include/aarch64-linux-gnu/c++/13/bits/c++locale.h:
-
-/usr/include/c++/13/tr1/riemann_zeta.tcc:
-
-/usr/include/c++/13/ostream:
-
-/usr/include/c++/13/bits/streambuf_iterator.h:
-
-/home/spenc/mystuff/fungi/src/game/manager.hpp:
-
-/usr/include/aarch64-linux-gnu/bits/mathcalls-narrow.h:
+/usr/include/aarch64-linux-gnu/bits/types/cookie_io_functions_t.h:
 
 /usr/include/aarch64-linux-gnu/bits/types/locale_t.h:
 
@@ -995,8 +999,6 @@ _deps/glfw-src/include/GLFW/glfw3.h:
 
 /usr/include/aarch64-linux-gnu/bits/typesizes.h:
 
-/usr/include/c++/13/bits/ios_base.h:
-
 /usr/include/aarch64-linux-gnu/bits/uintn-identity.h:
 
 /usr/include/aarch64-linux-gnu/sys/cdefs.h:
@@ -1030,6 +1032,8 @@ _deps/glfw-src/include/GLFW/glfw3.h:
 /usr/include/c++/13/bits/invoke.h:
 
 /usr/include/aarch64-linux-gnu/c++/13/bits/cpu_defines.h:
+
+/home/spenc/mystuff/fungi/src/game/models.hpp:
 
 /usr/include/aarch64-linux-gnu/c++/13/bits/ctype_base.h:
 

@@ -194,4 +194,6 @@ CMakeFiles/MyEngine.dir/src/main.cpp.o: \
  /usr/include/c++/13/tr1/riemann_zeta.tcc \
  /home/spenc/mystuff/fungi/src/./renderer/projection.hpp \
  /home/spenc/mystuff/fungi/src/./renderer/camera.hpp \
- /home/spenc/mystuff/fungi/src/./game/manager.hpp
+ /home/spenc/mystuff/fungi/src/./game/manager.hpp \
+ /home/spenc/mystuff/fungi/src/./game/models.hpp \
+ /home/spenc/mystuff/fungi/src/./game/../core/essentials.hpp

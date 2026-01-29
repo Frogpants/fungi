@@ -6,7 +6,9 @@ CMakeFiles/MyEngine.dir/src/main.cpp.o
  /home/spenc/mystuff/fungi/build/_deps/glad-build/include/KHR/khrplatform.h
  /home/spenc/mystuff/fungi/build/_deps/glad-build/include/glad/glad.h
  /home/spenc/mystuff/fungi/build/_deps/glfw-src/include/GLFW/glfw3.h
+ /home/spenc/mystuff/fungi/src/core/essentials.hpp
  /home/spenc/mystuff/fungi/src/game/manager.hpp
+ /home/spenc/mystuff/fungi/src/game/models.hpp
  /home/spenc/mystuff/fungi/src/core/essentials.hpp
  /home/spenc/mystuff/fungi/src/renderer/camera.hpp
  /home/spenc/mystuff/fungi/src/renderer/projection.hpp

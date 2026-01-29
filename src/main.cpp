@@ -80,16 +80,16 @@ std::vector<Triangle> scene;
 
 
 void InitScene() {
-    // Model bakeria;
+    Model shotgun;
 
-    // LoadOBJ(
-    //     "models/bakeria.obj",
-    //     bakeria,
-    //     vec3(0, 0, 5),
-    //     vec3(1.0f)
-    // );
+    LoadOBJ(
+        "game/models/shotgun.obj",
+        shotgun,
+        vec3(0.0, 0.0, 10.0),
+        vec3(1.0f)
+    );
 
-    // AppendModelToScene(bakeria, scene);
+    AppendModelToScene(shotgun, scene);
 }
 
 void InitFramebuffer(int w, int h) {
@@ -127,7 +127,6 @@ void InitFramebuffer(int w, int h) {
     glBindVertexArray(fullscreenVAO);
 }
 
-
 void Render(GLFWwindow* window) {
     int w, h;
     glfwGetFramebufferSize(window, &w, &h);
@@ -158,8 +157,6 @@ void Render(GLFWwindow* window) {
     glBindVertexArray(fullscreenVAO);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 }
-
-
 
 void framebuffer_size_callback(GLFWwindow*, int w, int h) {
     glViewport(0, 0, w, h);
