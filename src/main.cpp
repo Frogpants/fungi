@@ -10,8 +10,7 @@
 #include "./renderer/projection.hpp"
 
 #include "./game/manager.hpp"
-
-
+#include "./game/models.hpp"
 
 std::string LoadFile(const char* path) {
     std::ifstream file(path);
@@ -81,14 +80,17 @@ std::vector<Triangle> scene;
 
 
 void InitScene() {
-    scene.push_back({
-        { -1, -1, 3 },
-        {  1, -1, 3 },
-        {  0,  1, 3 }
-    });
+    // Model bakeria;
+
+    // LoadOBJ(
+    //     "models/bakeria.obj",
+    //     bakeria,
+    //     vec3(0, 0, 5),
+    //     vec3(1.0f)
+    // );
+
+    // AppendModelToScene(bakeria, scene);
 }
-
-
 
 void InitFramebuffer(int w, int h) {
     glGenFramebuffers(1, &sceneFBO);
