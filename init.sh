@@ -7,5 +7,3 @@ sudo apt update
 sudo apt install libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxxf86vm-dev libgl1-mesa-dev
 
 cmake ..
-
-cd build
