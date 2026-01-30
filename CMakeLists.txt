@@ -37,19 +37,14 @@ if (UNIX AND NOT APPLE)
 endif()
 
 # ---------------------------------
-# Shader auto-copy (NEW)
+# Shader auto-copy
 # ---------------------------------
 
-# Shader source directory (inside src)
 set(SHADER_SRC_DIR ${CMAKE_SOURCE_DIR}/src/renderer/shaders)
-
-# Shader destination directory (next to executable)
 set(SHADER_DST_DIR ${CMAKE_BINARY_DIR}/renderer/shaders)
 
-# Ensure destination exists
 file(MAKE_DIRECTORY ${SHADER_DST_DIR})
 
-# Copy shaders every build (only updates changed files)
 add_custom_target(copy_shaders ALL
     COMMAND ${CMAKE_COMMAND} -E copy_directory
             ${SHADER_SRC_DIR}
@@ -57,5 +52,21 @@ add_custom_target(copy_shaders ALL
     COMMENT "Copying shaders to build directory"
 )
 
-# Ensure shaders are copied before the executable runs
-add_dependencies(MyEngine copy_shaders)
+# ---------------------------------
+# Model auto-copy
+# ---------------------------------
+
+set(MODEL_SRC_DIR ${CMAKE_SOURCE_DIR}/src/game/models)
+set(MODEL_DST_DIR ${CMAKE_BINARY_DIR}/game/models)
+
+file(MAKE_DIRECTORY ${MODEL_DST_DIR})
+
+add_custom_target(copy_models ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${MODEL_SRC_DIR}
+            ${MODEL_DST_DIR}
+    COMMENT "Copying models to build directory"
+)
+
+# Ensure assets are copied before running
+add_dependencies(MyEngine copy_shaders copy_models)

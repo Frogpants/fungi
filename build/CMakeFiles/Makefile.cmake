@@ -88,6 +88,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/MyEngine.dir/DependInfo.cmake"
   "CMakeFiles/copy_shaders.dir/DependInfo.cmake"
+  "CMakeFiles/copy_models.dir/DependInfo.cmake"
   "_deps/glfw-build/CMakeFiles/uninstall.dir/DependInfo.cmake"
   "_deps/glfw-build/src/CMakeFiles/update_mappings.dir/DependInfo.cmake"
   "_deps/glfw-build/src/CMakeFiles/glfw.dir/DependInfo.cmake"

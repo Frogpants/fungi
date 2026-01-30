@@ -188,6 +188,19 @@ copy_shaders/fast:
 .PHONY : copy_shaders/fast
 
 #=============================================================================
+# Target rules for targets named copy_models
+
+# Build rule for target.
+copy_models: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 copy_models
+.PHONY : copy_models
+
+# fast build rule for target.
+copy_models/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/copy_models.dir/build.make CMakeFiles/copy_models.dir/build
+.PHONY : copy_models/fast
+
+#=============================================================================
 # Target rules for targets named uninstall
 
 # Build rule for target.
@@ -713,6 +726,7 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
+	@echo "... copy_models"
 	@echo "... copy_shaders"
 	@echo "... glad-generate-files"
 	@echo "... uninstall"

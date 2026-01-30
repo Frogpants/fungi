@@ -52,7 +52,7 @@ inline bool LoadOBJ(
             vec3 v2 = tempVerts[i3 - 1] * scale + position;
 
             outModel.triangles.push_back({
-                v0, v1, v2
+                v0, v2, v1
             });
         }
     }

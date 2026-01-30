@@ -80,13 +80,19 @@ std::vector<Triangle> scene;
 
 
 void InitScene() {
+    // scene.push_back({
+    //     vec3(-1,-1,5),
+    //     vec3( 1,-1,5),
+    //     vec3( 0, 1,5)
+    // });
+
     Model shotgun;
 
     LoadOBJ(
         "game/models/shotgun.obj",
         shotgun,
-        vec3(0.0, 0.0, 10.0),
-        vec3(1.0f)
+        vec3(0.0, 0.0, -5.0),
+        vec3(10.0f)
     );
 
     AppendModelToScene(shotgun, scene);
@@ -131,7 +137,7 @@ void Render(GLFWwindow* window) {
     int w, h;
     glfwGetFramebufferSize(window, &w, &h);
 
-    UpdVals();
+    UpdVals(w);
 
     glBindFramebuffer(GL_FRAMEBUFFER, sceneFBO);
     glViewport(0, 0, w, h);
