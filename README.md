@@ -14,7 +14,7 @@ make
 
 Run Project
 ```bash
-./MyEngine
+./run
 ```
 
 Clear Data
