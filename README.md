@@ -2,17 +2,22 @@
 
 ### Setup Commands
 
-Setup for project
+Setup For Project
 ```bash
 bash init.sh
 ```
 
-Update project code
+Update Project Code
 ```bash
 make
 ```
 
-Run project
+Run Project
 ```bash
 ./MyEngine
+```
+
+Clear Data
+```bash
+bash clear.sh
 ```
