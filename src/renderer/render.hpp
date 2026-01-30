@@ -2,10 +2,13 @@
 #include <vector>
 #include "../core/essentials.hpp"
 
+struct Vertex {
+    vec3 pos;
+    vec2 uv;
+};
+
 struct Triangle {
-    vec3 a;
-    vec3 b;
-    vec3 c;
+    Vertex a, b, c;
 };
 
 void RenderFrame(const std::vector<Triangle>& tris, int width, int height);

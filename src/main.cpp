@@ -8,7 +8,6 @@
 #include <vector>
 
 #include "./core/essentials.hpp"
-
 #include "./renderer/projection.hpp"
 #include "./renderer/camera.hpp"
 #include "./game/models.hpp"
@@ -53,49 +52,16 @@ GLuint CreateShaderProgram(const char* vs, const char* fs) {
     return p;
 }
 
-GLuint sceneFBO, sceneTexture, fullscreenVAO, postShader;
+GLuint vao, vbo, shader;
+GLuint texture;
 
 std::vector<Triangle> scene;
-std::vector<Triangle> screenScene;
 
 void InitScene() {
     Model shotgun;
-    LoadOBJ(
-        "game/models/shotgun.obj",
-        shotgun,
-        vec3(0, -0.25f, 5.0f), vec3(3)
-    );
-
-    AppendModelToScene(shotgun, scene);
+    LoadOBJ("game/models/shotgun.obj", shotgun, vec3(0, -0.25f, 5.0f), vec3(3));
+    scene.insert(scene.end(), shotgun.triangles.begin(), shotgun.triangles.end());
 }
-
-void InitFramebuffer(int w, int h) {
-    glGenFramebuffers(1, &sceneFBO);
-    glBindFramebuffer(GL_FRAMEBUFFER, sceneFBO);
-
-    glGenTextures(1, &sceneTexture);
-    glBindTexture(GL_TEXTURE_2D, sceneTexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0,
-                 GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-                           GL_TEXTURE_2D, sceneTexture, 0);
-
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-    glGenVertexArrays(1, &fullscreenVAO);
-}
-
-inline vec2 ToNDC(vec2 p, int w, int h) {
-    return {
-        (p.x / w) * 2.0f - 1.0f,
-        1.0f - (p.y / h) * 2.0f
-    };
-}
-
-GLuint vao, vbo, shader;
 
 void InitRender() {
     glGenVertexArrays(1, &vao);
@@ -103,129 +69,95 @@ void InitRender() {
 
     glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_DYNAMIC_DRAW);
 
+    // Each vertex has 4 floats: x, y, u, v
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 }
 
 void UploadTriangles(const std::vector<Triangle>& tris, int w, int h) {
     std::vector<float> verts;
-    for (const Triangle& t : screenScene) {
-        auto a = project(t.a.pos);
-        auto b = project(t.b.pos);
-        auto c = project(t.c.pos);
+    verts.reserve(tris.size() * 3 * 4); // 3 vertices per triangle, 4 floats per vertex (x,y,u,v)
 
-        a.x += w * 0.5f; a.y = h * 0.5f - a.y;
-        b.x += w * 0.5f; b.y = h * 0.5f - b.y;
-        c.x += w * 0.5f; c.y = h * 0.5f - c.y;
+    auto toScreen = [&](vec3 p) -> vec2 {
+        vec2 v = project(p);
+        v.x += w * 0.5f;
+        v.y = h * 0.5f - v.y;
+        return v;
+    };
 
-        verts.insert(verts.end(), {
-            a.x, a.y, t.a.uv.x, t.a.uv.y,
-            b.x, b.y, t.b.uv.x, t.b.uv.y,
-            c.x, c.y, t.c.uv.x, t.c.uv.y
-        });
+    for (const Triangle& t : tris) {
+        vec2 a = toScreen(t.a.pos);
+        vec2 b = toScreen(t.b.pos);
+        vec2 c = toScreen(t.c.pos);
+
+        verts.push_back(a.x); verts.push_back(a.y); verts.push_back(t.a.uv.x); verts.push_back(t.a.uv.y);
+        verts.push_back(b.x); verts.push_back(b.y); verts.push_back(t.b.uv.x); verts.push_back(t.b.uv.y);
+        verts.push_back(c.x); verts.push_back(c.y); verts.push_back(t.c.uv.x); verts.push_back(t.c.uv.y);
     }
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, verts.size() * sizeof(float), verts.data(), GL_DYNAMIC_DRAW);
-}
-
-void DrawTriangles() {
-    glUseProgram(shader);
-    glBindVertexArray(vao);
-    glDrawArrays(GL_TRIANGLES, 0, screenScene.size() * 3);
 }
 
 void Render(GLFWwindow* window) {
     int w, h;
     glfwGetFramebufferSize(window, &w, &h);
 
-    UpdVals(w);
-
-    screenScene.clear();
-    screenScene.reserve(scene.size());
-
-    // Prepare vertex buffer with projected positions and UVs
-    std::vector<float> verts;
-    verts.reserve(scene.size() * 3 * 4); // 3 vertices per triangle, 4 floats per vertex (x,y,u,v)
-
-    for (const Triangle& t : scene) {
-        // Project 3D positions to 2D screen space
-        vec2 a = project(t.a.pos);
-        vec2 b = project(t.b.pos);
-        vec2 c = project(t.c.pos);
-
-        // Optionally skip triangles behind camera
-        // if (a.x > 1e5f || b.x > 1e5f || c.x > 1e5f) continue;
-
-        // Convert to screen coordinates
-        a.x += w * 0.5f; a.y = h * 0.5f - a.y;
-        b.x += w * 0.5f; b.y = h * 0.5f - b.y;
-        c.x += w * 0.5f; c.y = h * 0.5f - c.y;
-
-        // Push each vertex: x, y, u, v
-        verts.insert(verts.end(), {
-            a.x, a.y, t.a.uv.x, t.a.uv.y,
-            b.x, b.y, t.b.uv.x, t.b.uv.y,
-            c.x, c.y, t.c.uv.x, t.c.uv.y
-        });
-    }
-
-    // Upload to GPU
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, verts.size() * sizeof(float), verts.data(), GL_DYNAMIC_DRAW);
-
-    // Clear screen
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // Draw triangles
-    DrawTriangles();
+    UploadTriangles(scene, w, h);
+
+    glUseProgram(shader);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glUniform1i(glGetUniformLocation(shader, "modelTexture"), 0);
+
+    glBindVertexArray(vao);
+    glDrawArrays(GL_TRIANGLES, 0, scene.size() * 3);
 }
 
 int main() {
-    glfwInit();
+    if (!glfwInit()) return -1;
+
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 
     GLFWwindow* window = glfwCreateWindow(1280, 720, "Mama's Bakeria", nullptr, nullptr);
+    if (!window) return -1;
     glfwMakeContextCurrent(window);
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
     camera = vec3(0, 0, 0);
     camRot = vec3(0);
 
-    postShader = CreateShaderProgram(
-        "renderer/shaders/vert.glsl",
-        "renderer/shaders/frag.glsl"
-    );
+    shader = CreateShaderProgram("renderer/shaders/vert.glsl", "renderer/shaders/frag.glsl");
 
     InitRender();
-
-    int w, h;
-    glfwGetFramebufferSize(window, &w, &h);
-    InitFramebuffer(w, h);
     InitScene();
 
-    GLuint texture;
+    // Load texture
     int tw, th, channels;
     unsigned char* data = stbi_load("game/models/shotgun-texture.png", &tw, &th, &channels, 4);
-
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glGenerateMipmap(GL_TEXTURE_2D);
     stbi_image_free(data);
-
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glUniform1i(glGetUniformLocation(shader, "modelTexture"), 0);
 
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
         Render(window);
         glfwSwapBuffers(window);
     }
+
+    glfwTerminate();
+    return 0;
 }

@@ -10,15 +10,6 @@
 #include "../core/essentials.hpp"
 #include "../renderer/render.hpp"
 
-struct Vertex {
-    vec3 pos;
-    vec2 uv;
-};
-
-struct Triangle {
-    Vertex a, b, c;
-};
-
 struct Model {
     std::vector<Triangle> triangles;
 };

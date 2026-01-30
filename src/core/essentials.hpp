@@ -467,10 +467,6 @@ inline vec4 clamp(const vec4& v, float min_val, float max_val) {
 }
 
 
-inline float abs(float x) {
-    return std::abs(x);
-}
-
 inline vec2 abs(const vec2& v) {
     vec2 n(std::abs(v.x), std::abs(v.y));
     return n;

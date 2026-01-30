@@ -7,7 +7,11 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 include(FetchContent)
 
-# ---------- GLFW ----------
+# ----------------------------
+# Fetch Dependencies
+# ----------------------------
+
+# GLFW
 FetchContent_Declare(
     glfw
     GIT_REPOSITORY https://github.com/glfw/glfw.git
@@ -15,7 +19,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(glfw)
 
-# ---------- GLAD ----------
+# GLAD
 FetchContent_Declare(
     glad
     GIT_REPOSITORY https://github.com/Dav1dde/glad.git
@@ -23,36 +27,46 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(glad)
 
-# ---------- STB_IMAGE ----------
+# STB (header only)
 FetchContent_Declare(
     stb
     GIT_REPOSITORY https://github.com/nothings/stb.git
 )
 FetchContent_MakeAvailable(stb)
 
-# ---------- Engine Sources ----------
-file(GLOB_RECURSE ENGINE_SOURCES src/*.cpp src/*.h)
+# ----------------------------
+# Engine sources
+# ----------------------------
+file(GLOB_RECURSE ENGINE_SOURCES src/*.cpp)
+file(GLOB_RECURSE ENGINE_HEADERS src/*.h)
 
-# ---------- Create executable ----------
-add_executable(MyEngine ${ENGINE_SOURCES})
+# Add STB implementation
+list(APPEND ENGINE_SOURCES src/external/stb_image.cpp)
 
-# ---------- Include Directories ----------
+# ----------------------------
+# Executable
+# ----------------------------
+add_executable(MyEngine ${ENGINE_SOURCES} ${ENGINE_HEADERS})
+
+# ----------------------------
+# Include directories
+# ----------------------------
 target_include_directories(MyEngine PRIVATE
     ${glfw_SOURCE_DIR}/include
     ${glad_SOURCE_DIR}/include
-    ${stb_SOURCE_DIR}    # for stb_image.h
+    ${stb_SOURCE_DIR}          # for stb_image.h
     src
 )
 
-# ---------- Link Libraries ----------
+# ----------------------------
+# Link libraries
+# ----------------------------
 target_link_libraries(MyEngine PRIVATE glfw glad)
 
-# ---------- OS-specific dependencies ----------
+# OS-specific linking
 if(UNIX AND NOT APPLE)
-    target_link_libraries(MyEngine PRIVATE dl pthread X11 Xrandr Xi Xxf86vm Xcursor)
-endif()
-
-if(APPLE)
+    target_link_libraries(MyEngine PRIVATE dl pthread X11 Xrandr Xi Xxf86vm Xcursor GL)
+elseif(APPLE)
     find_library(COCOA_LIBRARY Cocoa)
     find_library(IOKIT_LIBRARY IOKit)
     find_library(COREVIDEO_LIBRARY CoreVideo)
@@ -64,15 +78,13 @@ if(APPLE)
         ${COREVIDEO_LIBRARY}
         ${OPENGL_LIBRARY}
     )
-endif()
-
-if(WIN32)
+elseif(WIN32)
     target_link_libraries(MyEngine PRIVATE opengl32)
 endif()
 
-# ---------------------------------
-# Shader auto-copy
-# ---------------------------------
+# ----------------------------
+# Auto-copy assets
+# ----------------------------
 set(SHADER_SRC_DIR ${CMAKE_SOURCE_DIR}/src/renderer/shaders)
 set(SHADER_DST_DIR ${CMAKE_BINARY_DIR}/renderer/shaders)
 file(MAKE_DIRECTORY ${SHADER_DST_DIR})
@@ -84,9 +96,6 @@ add_custom_target(copy_shaders ALL
     COMMENT "Copying shaders to build directory"
 )
 
-# ---------------------------------
-# Model auto-copy
-# ---------------------------------
 set(MODEL_SRC_DIR ${CMAKE_SOURCE_DIR}/src/game/models)
 set(MODEL_DST_DIR ${CMAKE_BINARY_DIR}/game/models)
 file(MAKE_DIRECTORY ${MODEL_DST_DIR})
@@ -98,15 +107,17 @@ add_custom_target(copy_models ALL
     COMMENT "Copying models to build directory"
 )
 
-# Ensure assets are copied before building
+# Make sure assets are copied before building
 add_dependencies(MyEngine copy_shaders copy_models)
 
-# Optional: post-build copy to binary folder (if needed)
-add_custom_command(TARGET MyEngine POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-            ${SHADER_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/renderer/shaders
-)
-add_custom_command(TARGET MyEngine POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-            ${MODEL_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/game/models
-)
+# ----------------------------
+# Optional: create a ./run symlink/executable
+# ----------------------------
+if(UNIX)
+    add_custom_target(run ALL
+        COMMAND ${CMAKE_COMMAND} -E remove -f ${CMAKE_BINARY_DIR}/run
+        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE:MyEngine> ${CMAKE_BINARY_DIR}/run
+        DEPENDS MyEngine
+        COMMENT "Creating ./run symlink for the executable"
+    )
+endif()
