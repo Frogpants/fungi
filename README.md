@@ -1,23 +1,5 @@
 # README
 
-### Folder Hierarchy
-```
-src/
-├── core/
-│   └── essentials.hpp
-|
-├── physics/
-│   └── Physics.cpp
-|
-├── game/
-│   └── Game.cpp
-│
-├── renderer/
-│   └── shaders/
-|
-└── Main.cpp
-```
-
 ### Setup Commands
 
 Setup for project
