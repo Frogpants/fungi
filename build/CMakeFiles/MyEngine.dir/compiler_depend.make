@@ -5,13 +5,15 @@ CMakeFiles/MyEngine.dir/src/main.cpp.o: /home/spenc/mystuff/fungi/src/main.cpp \
   _deps/glad-build/include/KHR/khrplatform.h \
   _deps/glad-build/include/glad/glad.h \
   _deps/glfw-src/include/GLFW/glfw3.h \
+  _deps/stb-src/stb_image.h \
   /home/spenc/mystuff/fungi/src/core/essentials.hpp \
-  /home/spenc/mystuff/fungi/src/game/manager.hpp \
+  /home/spenc/mystuff/fungi/src/core/essentials.hpp \
+  /home/spenc/mystuff/fungi/src/core/essentials.hpp \
+  /home/spenc/mystuff/fungi/src/renderer/render.hpp \
   /home/spenc/mystuff/fungi/src/game/models.hpp \
   /home/spenc/mystuff/fungi/src/core/essentials.hpp \
   /home/spenc/mystuff/fungi/src/renderer/camera.hpp \
   /home/spenc/mystuff/fungi/src/renderer/projection.hpp \
-  /home/spenc/mystuff/fungi/src/renderer/render.hpp \
   /usr/include/aarch64-linux-gnu/asm/errno.h \
   /usr/include/aarch64-linux-gnu/bits/atomic_wide_counter.h \
   /usr/include/aarch64-linux-gnu/bits/byteswap.h \
@@ -200,6 +202,7 @@ CMakeFiles/MyEngine.dir/src/main.cpp.o: /home/spenc/mystuff/fungi/src/main.cpp \
   /usr/include/c++/13/pstl/pstl_config.h \
   /usr/include/c++/13/sstream \
   /usr/include/c++/13/stdexcept \
+  /usr/include/c++/13/stdlib.h \
   /usr/include/c++/13/streambuf \
   /usr/include/c++/13/string \
   /usr/include/c++/13/string_view \
@@ -426,8 +429,6 @@ CMakeFiles/MyEngine.dir/src/renderer/render.cpp.o: /home/spenc/mystuff/fungi/src
   _deps/glad-build/include/KHR/khrplatform.h \
   _deps/glad-build/include/glad/glad.h \
   /home/spenc/mystuff/fungi/src/core/essentials.hpp \
-  /home/spenc/mystuff/fungi/src/renderer/camera.hpp \
-  /home/spenc/mystuff/fungi/src/renderer/projection.hpp \
   /home/spenc/mystuff/fungi/src/renderer/render.hpp \
   /usr/include/aarch64-linux-gnu/asm/errno.h \
   /usr/include/aarch64-linux-gnu/bits/atomic_wide_counter.h \
@@ -641,9 +642,9 @@ CMakeFiles/MyEngine.dir/src/renderer/render.cpp.o: /home/spenc/mystuff/fungi/src
 
 /usr/include/c++/13/string:
 
-/usr/include/c++/13/stdexcept:
+/usr/include/c++/13/stdlib.h:
 
-/usr/include/c++/13/sstream:
+/usr/include/c++/13/stdexcept:
 
 /usr/include/c++/13/pstl/pstl_config.h:
 
@@ -680,6 +681,12 @@ CMakeFiles/MyEngine.dir/src/renderer/render.cpp.o: /home/spenc/mystuff/fungi/src
 /usr/include/c++/13/bits/stringfwd.h:
 
 /usr/include/c++/13/bits/string_view.tcc:
+
+/usr/include/c++/13/tr1/riemann_zeta.tcc:
+
+/usr/include/c++/13/ostream:
+
+/usr/include/c++/13/bits/streambuf_iterator.h:
 
 /usr/include/endian.h:
 
@@ -773,6 +780,22 @@ CMakeFiles/MyEngine.dir/src/renderer/render.cpp.o: /home/spenc/mystuff/fungi/src
 
 /usr/include/aarch64-linux-gnu/bits/sched.h:
 
+/usr/include/c++/13/tuple:
+
+/usr/include/aarch64-linux-gnu/bits/stdio_lim.h:
+
+/usr/include/features.h:
+
+/usr/include/aarch64-linux-gnu/c++/13/bits/c++allocator.h:
+
+/usr/include/features-time64.h:
+
+/usr/include/c++/13/string_view:
+
+/usr/include/aarch64-linux-gnu/c++/13/bits/c++locale.h:
+
+/usr/include/aarch64-linux-gnu/bits/mathcalls-narrow.h:
+
 /usr/include/aarch64-linux-gnu/bits/byteswap.h:
 
 /usr/include/aarch64-linux-gnu/bits/atomic_wide_counter.h:
@@ -784,18 +807,6 @@ CMakeFiles/MyEngine.dir/src/renderer/render.cpp.o: /home/spenc/mystuff/fungi/src
 /usr/include/aarch64-linux-gnu/bits/timesize.h:
 
 /usr/include/aarch64-linux-gnu/bits/select.h:
-
-/usr/include/aarch64-linux-gnu/bits/floatn-common.h:
-
-/usr/include/aarch64-linux-gnu/bits/types/__locale_t.h:
-
-/usr/include/c++/13/bits/basic_ios.tcc:
-
-/usr/include/aarch64-linux-gnu/bits/long-double.h:
-
-/usr/include/aarch64-linux-gnu/bits/libc-header-start.h:
-
-/usr/include/aarch64-linux-gnu/bits/fp-fast.h:
 
 /usr/include/c++/13/ios:
 
@@ -813,29 +824,17 @@ CMakeFiles/MyEngine.dir/src/renderer/render.cpp.o: /home/spenc/mystuff/fungi/src
 
 /usr/include/aarch64-linux-gnu/bits/types/mbstate_t.h:
 
-/usr/include/c++/13/tuple:
+/usr/include/aarch64-linux-gnu/bits/floatn-common.h:
 
-/usr/include/aarch64-linux-gnu/bits/stdio_lim.h:
+/usr/include/aarch64-linux-gnu/bits/types/__locale_t.h:
 
-/usr/include/features.h:
+/usr/include/c++/13/bits/basic_ios.tcc:
 
-/usr/include/aarch64-linux-gnu/c++/13/bits/c++allocator.h:
+/usr/include/aarch64-linux-gnu/bits/long-double.h:
 
-/usr/include/features-time64.h:
+/usr/include/aarch64-linux-gnu/bits/libc-header-start.h:
 
-/usr/include/c++/13/string_view:
-
-/usr/include/aarch64-linux-gnu/c++/13/bits/c++locale.h:
-
-/usr/include/aarch64-linux-gnu/bits/mathcalls-narrow.h:
-
-/usr/include/c++/13/tr1/riemann_zeta.tcc:
-
-/usr/include/c++/13/ostream:
-
-/usr/include/c++/13/bits/streambuf_iterator.h:
-
-/home/spenc/mystuff/fungi/src/game/manager.hpp:
+/usr/include/aarch64-linux-gnu/bits/fp-fast.h:
 
 /usr/include/aarch64-linux-gnu/bits/types.h:
 
@@ -867,15 +866,23 @@ CMakeFiles/MyEngine.dir/src/renderer/render.cpp.o: /home/spenc/mystuff/fungi/src
 
 /usr/include/aarch64-linux-gnu/gnu/stubs.h:
 
+/usr/include/c++/13/sstream:
+
+_deps/stb-src/stb_image.h:
+
+/usr/include/c++/13/bits/locale_facets.h:
+
+/usr/include/aarch64-linux-gnu/bits/pthreadtypes-arch.h:
+
+/usr/include/ctype.h:
+
+/usr/include/aarch64-linux-gnu/bits/endianness.h:
+
 /usr/include/c++/13/initializer_list:
 
 /usr/include/aarch64-linux-gnu/c++/13/bits/atomic_word.h:
 
 /usr/include/aarch64-linux-gnu/asm/errno.h:
-
-/usr/include/c++/13/bits/locale_facets.h:
-
-/usr/include/aarch64-linux-gnu/bits/pthreadtypes-arch.h:
 
 /home/spenc/mystuff/fungi/src/main.cpp:
 
@@ -909,9 +916,9 @@ CMakeFiles/MyEngine.dir/src/renderer/render.cpp.o: /home/spenc/mystuff/fungi/src
 
 /usr/include/c++/13/streambuf:
 
-/usr/include/aarch64-linux-gnu/bits/locale.h:
-
 _deps/glad-build/include/glad/glad.h:
+
+/usr/include/aarch64-linux-gnu/bits/locale.h:
 
 /usr/include/c++/13/bits/exception.h:
 
@@ -928,10 +935,6 @@ _deps/glad-build/include/KHR/khrplatform.h:
 /usr/include/aarch64-linux-gnu/bits/floatn.h:
 
 /usr/include/aarch64-linux-gnu/bits/endian.h:
-
-/usr/include/ctype.h:
-
-/usr/include/aarch64-linux-gnu/bits/endianness.h:
 
 _deps/glfw-src/include/GLFW/glfw3.h:
 

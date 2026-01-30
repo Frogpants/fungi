@@ -152,6 +152,4 @@ CMakeFiles/MyEngine.dir/src/renderer/render.cpp.o: \
  /usr/include/c++/13/tr1/modified_bessel_func.tcc \
  /usr/include/c++/13/tr1/poly_hermite.tcc \
  /usr/include/c++/13/tr1/poly_laguerre.tcc \
- /usr/include/c++/13/tr1/riemann_zeta.tcc \
- /home/spenc/mystuff/fungi/src/renderer/projection.hpp \
- /home/spenc/mystuff/fungi/src/renderer/camera.hpp
+ /usr/include/c++/13/tr1/riemann_zeta.tcc

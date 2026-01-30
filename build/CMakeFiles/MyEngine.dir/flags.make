@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/spenc/mystuff/fungi/build/_deps/glfw-src/include -I/home/spenc/mystuff/fungi/build/_deps/glad-build/include
+CXX_INCLUDES = -I/home/spenc/mystuff/fungi/build/_deps/glad-src/include -I/home/spenc/mystuff/fungi/build/_deps/glfw-src/include -I/home/spenc/mystuff/fungi/build/_deps/stb-src -I/home/spenc/mystuff/fungi/build/_deps/glad-build/include
 
 CXX_FLAGS = -std=gnu++17
 

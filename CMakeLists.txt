@@ -12,7 +12,6 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/glfw/glfw.git
     GIT_TAG 3.3.9
 )
-
 FetchContent_MakeAvailable(glfw)
 
 # ---------- GLAD ----------
@@ -21,8 +20,15 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/Dav1dde/glad.git
     GIT_TAG v0.1.36
 )
-
 FetchContent_MakeAvailable(glad)
+
+# ---------- STB_IMAGE ----------
+FetchContent_Declare(
+    stb
+    GIT_REPOSITORY https://github.com/nothings/stb.git
+    GIT_TAG master
+)
+FetchContent_MakeAvailable(stb)
 
 # ---------- Engine ----------
 file(GLOB_RECURSE ENGINE_SOURCES src/*.cpp)
@@ -30,6 +36,13 @@ file(GLOB_RECURSE ENGINE_SOURCES src/*.cpp)
 add_executable(MyEngine ${ENGINE_SOURCES})
 
 target_link_libraries(MyEngine PRIVATE glfw glad)
+
+# Include directories
+target_include_directories(MyEngine PRIVATE
+    ${glad_SOURCE_DIR}/include
+    ${glfw_SOURCE_DIR}/include
+    ${stb_SOURCE_DIR}          # <- include stb_image.h
+)
 
 # Required on Linux
 if (UNIX AND NOT APPLE)
@@ -39,7 +52,6 @@ endif()
 # ---------------------------------
 # Shader auto-copy
 # ---------------------------------
-
 set(SHADER_SRC_DIR ${CMAKE_SOURCE_DIR}/src/renderer/shaders)
 set(SHADER_DST_DIR ${CMAKE_BINARY_DIR}/renderer/shaders)
 
@@ -55,7 +67,6 @@ add_custom_target(copy_shaders ALL
 # ---------------------------------
 # Model auto-copy
 # ---------------------------------
-
 set(MODEL_SRC_DIR ${CMAKE_SOURCE_DIR}/src/game/models)
 set(MODEL_DST_DIR ${CMAKE_BINARY_DIR}/game/models)
 

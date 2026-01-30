@@ -57,7 +57,7 @@ inline vec2 project(vec3 pos) {
     float y3 = p.x * sin(camRot.z) + p.y * cos(camRot.z);
     p.x = x3; p.y = y3;
 
-    if (p.z <= near) return vec2(1e6,1e6);
+    // if (p.z <= near) return vec2(1e6,1e6);
 
     return vec2(f*(p.x/p.z), f*(p.y/p.z));
 }

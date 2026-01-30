@@ -71,6 +71,7 @@ set(CMAKE_MAKEFILE_OUTPUTS
 set(CMAKE_MAKEFILE_PRODUCTS
   "_deps/glfw-subbuild/CMakeLists.txt"
   "_deps/glad-subbuild/CMakeLists.txt"
+  "_deps/stb-subbuild/CMakeLists.txt"
   "CMakeFiles/CMakeDirectoryInformation.cmake"
   "_deps/glfw-build/src/glfw3Config.cmake"
   "_deps/glfw-build/src/glfw3ConfigVersion.cmake"
