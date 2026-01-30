@@ -4,8 +4,7 @@
 
 Setup for project
 ```bash
-bash run.sh
-cmake ..
+bash init.sh
 ```
 
 Update project code
