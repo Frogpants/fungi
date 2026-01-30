@@ -4,7 +4,7 @@
 
 Setup for project
 ```bash
-cd build
+bash run.sh
 cmake ..
 ```
 
