@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.16)
-project(MyEngine)
+project(MyEngine LANGUAGES CXX)
 
+# ----------------------------
+# C++ Standard
+# ----------------------------
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -8,7 +11,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 include(FetchContent)
 
 # ----------------------------
-# Fetch Dependencies
+# Dependencies
 # ----------------------------
 
 # GLFW
@@ -27,7 +30,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(glad)
 
-# STB (header only)
+# STB (header-only, except stb_image.cpp)
 FetchContent_Declare(
     stb
     GIT_REPOSITORY https://github.com/nothings/stb.git
@@ -35,37 +38,61 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(stb)
 
 # ----------------------------
-# Engine sources
+# Engine Sources
 # ----------------------------
-file(GLOB_RECURSE ENGINE_SOURCES src/*.cpp)
-file(GLOB_RECURSE ENGINE_HEADERS src/*.h)
 
-# Add STB implementation
-list(APPEND ENGINE_SOURCES src/external/stb_image.cpp)
+# Explicit globbing for cpp only (safe)
+file(GLOB_RECURSE ENGINE_CPP
+    CONFIGURE_DEPENDS
+    src/*.cpp
+)
+
+file(GLOB_RECURSE ENGINE_HPP
+    CONFIGURE_DEPENDS
+    src/*.hpp
+    src/*.h
+)
 
 # ----------------------------
 # Executable
 # ----------------------------
-add_executable(MyEngine ${ENGINE_SOURCES} ${ENGINE_HEADERS})
-
-# ----------------------------
-# Include directories
-# ----------------------------
-target_include_directories(MyEngine PRIVATE
-    ${glfw_SOURCE_DIR}/include
-    ${glad_SOURCE_DIR}/include
-    ${stb_SOURCE_DIR}          # for stb_image.h
-    src
+add_executable(MyEngine
+    ${ENGINE_CPP}
+    ${ENGINE_HPP}
 )
 
 # ----------------------------
-# Link libraries
+# Include Directories
 # ----------------------------
-target_link_libraries(MyEngine PRIVATE glfw glad)
+target_include_directories(MyEngine PRIVATE
+    src
+    ${glfw_SOURCE_DIR}/include
+    ${glad_SOURCE_DIR}/include
+    ${stb_SOURCE_DIR}
+)
 
-# OS-specific linking
+# ----------------------------
+# Link Libraries
+# ----------------------------
+target_link_libraries(MyEngine PRIVATE
+    glfw
+    glad
+)
+
+# ----------------------------
+# Platform-specific OpenGL
+# ----------------------------
 if(UNIX AND NOT APPLE)
-    target_link_libraries(MyEngine PRIVATE dl pthread X11 Xrandr Xi Xxf86vm Xcursor GL)
+    target_link_libraries(MyEngine PRIVATE
+        dl
+        pthread
+        X11
+        Xrandr
+        Xi
+        Xxf86vm
+        Xcursor
+        GL
+    )
 elseif(APPLE)
     find_library(COCOA_LIBRARY Cocoa)
     find_library(IOKIT_LIBRARY IOKit)
@@ -83,41 +110,43 @@ elseif(WIN32)
 endif()
 
 # ----------------------------
-# Auto-copy assets
+# Asset Copying
 # ----------------------------
+
 set(SHADER_SRC_DIR ${CMAKE_SOURCE_DIR}/src/renderer/shaders)
 set(SHADER_DST_DIR ${CMAKE_BINARY_DIR}/renderer/shaders)
-file(MAKE_DIRECTORY ${SHADER_DST_DIR})
 
 add_custom_target(copy_shaders ALL
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${SHADER_DST_DIR}
     COMMAND ${CMAKE_COMMAND} -E copy_directory
             ${SHADER_SRC_DIR}
             ${SHADER_DST_DIR}
-    COMMENT "Copying shaders to build directory"
+    COMMENT "Copying shaders"
 )
 
 set(MODEL_SRC_DIR ${CMAKE_SOURCE_DIR}/src/game/models)
 set(MODEL_DST_DIR ${CMAKE_BINARY_DIR}/game/models)
-file(MAKE_DIRECTORY ${MODEL_DST_DIR})
 
 add_custom_target(copy_models ALL
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${MODEL_DST_DIR}
     COMMAND ${CMAKE_COMMAND} -E copy_directory
             ${MODEL_SRC_DIR}
             ${MODEL_DST_DIR}
-    COMMENT "Copying models to build directory"
+    COMMENT "Copying models"
 )
 
-# Make sure assets are copied before building
 add_dependencies(MyEngine copy_shaders copy_models)
 
 # ----------------------------
-# Optional: create a ./run symlink/executable
+# Convenience Run Target
 # ----------------------------
 if(UNIX)
-    add_custom_target(run ALL
+    add_custom_target(run
         COMMAND ${CMAKE_COMMAND} -E remove -f ${CMAKE_BINARY_DIR}/run
-        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE:MyEngine> ${CMAKE_BINARY_DIR}/run
+        COMMAND ${CMAKE_COMMAND} -E create_symlink
+                $<TARGET_FILE:MyEngine>
+                ${CMAKE_BINARY_DIR}/run
         DEPENDS MyEngine
-        COMMENT "Creating ./run symlink for the executable"
+        COMMENT "Creating ./run symlink"
     )
 endif()

@@ -12,6 +12,8 @@
 #include "./renderer/camera.hpp"
 #include "./game/models.hpp"
 
+#include "./game/manager.hpp"
+
 static GLuint vao, vbo, shader, texture;
 static std::vector<Triangle> scene;
 
@@ -125,6 +127,26 @@ void UploadTriangles(int w, int h) {
     );
 }
 
+
+void Controls() {
+    if (Input::IsDown("w")) {
+        std::cout << "(" << camera.x << ", " << camera.y << ", " << camera.z << ")";
+        moveXZ(0.1);
+    }
+    if (Input::IsDown("s")) {
+        moveXZ(-0.1);
+    }
+    camRot.x += 90.0;
+    if (Input::IsDown("d")) {
+        moveXZ(0.1);
+    }
+    if (Input::IsDown("a")) {
+        moveXZ(-0.1);
+    }
+    camRot.x += -90.0;
+}
+
+
 void Render(GLFWwindow* window) {
     int w, h;
     glfwGetFramebufferSize(window, &w, &h);
@@ -191,9 +213,15 @@ int main() {
 
     stbi_image_free(data);
 
+    Manager::Init(window);
 
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
+
+        Manager::Update();
+
+        Controls();
+
         Render(window);
         glfwSwapBuffers(window);
     }
