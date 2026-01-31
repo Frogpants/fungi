@@ -191,6 +191,7 @@ int main() {
 
     stbi_image_free(data);
 
+
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
         Render(window);
