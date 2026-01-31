@@ -2,9 +2,19 @@
 
 #include "../core/essentials.hpp"
 
-inline vec3 camera = vec3(0.0);
-inline vec3 camRot = vec3(0.0);
+struct Camera {
+    vec3 pos = vec3(0.0);
+    vec3 rot = vec3(0.0);
+};
 
-inline void moveXZ(float speed) {
-    camera.xz = vec2(sin(camRot.x), cos(camRot.x)) * speed;
+inline Camera camera;
+
+inline void moveForward(float speed) {
+    camera.pos.x += sin(camera.rot.x) * speed;
+    camera.pos.z += cos(camera.rot.x) * speed;
+}
+
+inline void moveRight(float speed) {
+    camera.pos.x += cos(camera.rot.x) * speed;
+    camera.pos.z -= sin(camera.rot.x) * speed;
 }

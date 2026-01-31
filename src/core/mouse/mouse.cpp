@@ -22,19 +22,27 @@ namespace {
     double scrollX = 0.0;
     double scrollY = 0.0;
 
+    GLFWwindow* g_window = nullptr;
+    bool mouseLocked = false;
+
     void CursorPosCallback(GLFWwindow*, double x, double y) {
         mouseX = x;
         mouseY = y;
     }
 
-    void MouseButtonCallback(GLFWwindow*, int button, int action, int) {
+    void MouseButtonCallback(GLFWwindow* window, int button, int action, int) {
         auto& state = buttons[button];
 
         if (action == GLFW_PRESS) {
             state.down = true;
             state.pressed = true;
-        }
-        else if (action == GLFW_RELEASE) {
+
+            // Lock and hide mouse on first left-click
+            if (!mouseLocked && button == GLFW_MOUSE_BUTTON_LEFT) {
+                mouseLocked = true;
+                glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+            }
+        } else if (action == GLFW_RELEASE) {
             state.down = false;
             state.released = true;
         }
@@ -44,25 +52,46 @@ namespace {
         scrollX += xoff;
         scrollY += yoff;
     }
+
+    void KeyCallback(GLFWwindow* window, int key, int, int action, int) {
+        if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS && mouseLocked) {
+            mouseLocked = false;
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        }
+    }
+
 }
 
 namespace Mouse {
 
     void Init(GLFWwindow* window) {
+        g_window = window;
+
         glfwSetCursorPosCallback(window, CursorPosCallback);
         glfwSetMouseButtonCallback(window, MouseButtonCallback);
         glfwSetScrollCallback(window, ScrollCallback);
+        glfwSetKeyCallback(window, KeyCallback);
+
+        // Initialize last positions
+        glfwGetCursorPos(window, &lastX, &lastY);
+        mouseX = lastX;
+        mouseY = lastY;
     }
 
     void Update() {
+        // Compute relative movement
         deltaX = mouseX - lastX;
         deltaY = mouseY - lastY;
+
+        // Update last position
         lastX = mouseX;
         lastY = mouseY;
 
+        // Reset scroll
         scrollX = 0.0;
         scrollY = 0.0;
 
+        // Reset pressed/released
         for (auto& [_, state] : buttons) {
             state.pressed = false;
             state.released = false;
@@ -75,18 +104,26 @@ namespace Mouse {
     double DeltaX() { return deltaX; }
     double DeltaY() { return deltaY; }
 
-    bool IsDown(int button) {
-        return buttons[button].down;
-    }
-
-    bool IsPressed(int button) {
-        return buttons[button].pressed;
-    }
-
-    bool IsReleased(int button) {
-        return buttons[button].released;
-    }
+    bool IsDown(int button) { return buttons[button].down; }
+    bool IsPressed(int button) { return buttons[button].pressed; }
+    bool IsReleased(int button) { return buttons[button].released; }
 
     double ScrollX() { return scrollX; }
     double ScrollY() { return scrollY; }
+
+    void Lock() {
+        if (g_window) {
+            mouseLocked = true;
+            glfwSetInputMode(g_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+        }
+    }
+
+    void Unlock() {
+        if (g_window) {
+            mouseLocked = false;
+            glfwSetInputMode(g_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        }
+    }
+
+    bool IsLocked() { return mouseLocked; }
 }

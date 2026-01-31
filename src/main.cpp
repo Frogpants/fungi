@@ -6,6 +6,8 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <cmath>
+#include <stdexcept>
 
 #include "./core/essentials.hpp"
 #include "./renderer/projection.hpp"
@@ -16,8 +18,6 @@
 
 static GLuint vao, vbo, shader, texture;
 static std::vector<Triangle> scene;
-
-
 
 std::string LoadFile(const char* path) {
     std::ifstream file(path);
@@ -63,7 +63,7 @@ void InitScene() {
     LoadOBJ(
         "game/models/shotgun.obj",
         shotgun,
-        vec3(0, -0.25f, 5.0f),
+        vec3(0, 0, 5.0f),
         vec3(3.0f)
     );
 
@@ -101,8 +101,8 @@ void UploadTriangles(int w, int h) {
 
     auto toScreen = [&](const vec3& p) {
         vec2 v = project(p);
-        v.x += w * 0.5f;
-        v.y = h * 0.5f - v.y;
+        v.x = (v.x / (w * 0.5f));
+        v.y = (v.y / (h * 0.5f));
         return v;
     };
 
@@ -128,22 +128,38 @@ void UploadTriangles(int w, int h) {
 }
 
 
-void Controls() {
+void Controls(int w, int h) {
     if (Input::IsDown("w")) {
-        std::cout << "(" << camera.x << ", " << camera.y << ", " << camera.z << ")";
-        moveXZ(0.1);
+        moveForward(0.1);
     }
     if (Input::IsDown("s")) {
-        moveXZ(-0.1);
+        moveForward(-0.1);
     }
-    camRot.x += 90.0;
+
     if (Input::IsDown("d")) {
-        moveXZ(0.1);
+        moveRight(0.1);
     }
     if (Input::IsDown("a")) {
-        moveXZ(-0.1);
+        moveRight(-0.1);
     }
-    camRot.x += -90.0;
+
+    if (Input::IsDown("e")) {
+        camera.pos.y += 0.1;
+    }
+    if (Input::IsDown("q")) {
+        camera.pos.y -= 0.1;
+    }
+
+    // if (Mouse::IsPressed(0) && !Mouse::IsLocked()) {
+    //     Mouse::Lock();
+    // }
+    // if (Mouse::IsLocked()) {
+    //     camera.rot.x += Mouse::DeltaX() * 0.001;
+    //     camera.rot.y -= Mouse::DeltaY() * 0.001;
+    //     if (Input::IsPressed("esc")) {
+    //         Mouse::Unlock();
+    //     }
+    // }
 }
 
 
@@ -173,7 +189,7 @@ int main() {
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow* window = glfwCreateWindow(
         1280, 720, "Mama's Bakeria", nullptr, nullptr
@@ -182,12 +198,12 @@ int main() {
     glfwMakeContextCurrent(window);
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
-    camera = vec3(0, 0, 0);
-    camRot = vec3(0);
+    camera.pos = vec3(0.0);
+    camera.rot = vec3(0.0);
 
     shader = CreateShaderProgram(
-        "renderer/shaders/vert.glsl",
-        "renderer/shaders/frag.glsl"
+        "renderer/shaders/vertTri.glsl",
+        "renderer/shaders/fragTri.glsl"
     );
 
     InitRender();
@@ -217,10 +233,11 @@ int main() {
 
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
+        timer += deltaTime;
+
+        Controls(w, h);
 
         Manager::Update();
-
-        Controls();
 
         Render(window);
         glfwSwapBuffers(window);

@@ -10,6 +10,7 @@ namespace Mouse {
 
     double X();
     double Y();
+
     double DeltaX();
     double DeltaY();
 
@@ -19,4 +20,8 @@ namespace Mouse {
 
     double ScrollX();
     double ScrollY();
+
+    void Lock();
+    void Unlock();
+    bool IsLocked();
 }

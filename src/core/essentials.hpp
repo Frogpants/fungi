@@ -9,7 +9,7 @@
 constexpr float pi = 3.14157142857;
 
 inline float timer = 0.0;
-inline float deltaTime = 0.0;
+inline float deltaTime = 0.01;
 
 class vec2 {
 public:
