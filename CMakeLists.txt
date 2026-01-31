@@ -30,7 +30,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(glad)
 
-# STB (header-only, except stb_image.cpp)
+# STB
 FetchContent_Declare(
     stb
     GIT_REPOSITORY https://github.com/nothings/stb.git
@@ -40,8 +40,6 @@ FetchContent_MakeAvailable(stb)
 # ----------------------------
 # Engine Sources
 # ----------------------------
-
-# Explicit globbing for cpp only (safe)
 file(GLOB_RECURSE ENGINE_CPP
     CONFIGURE_DEPENDS
     src/*.cpp
@@ -54,9 +52,9 @@ file(GLOB_RECURSE ENGINE_HPP
 )
 
 # ----------------------------
-# Executable
+# Executable (NAME = run)
 # ----------------------------
-add_executable(MyEngine
+add_executable(run
     ${ENGINE_CPP}
     ${ENGINE_HPP}
 )
@@ -64,7 +62,7 @@ add_executable(MyEngine
 # ----------------------------
 # Include Directories
 # ----------------------------
-target_include_directories(MyEngine PRIVATE
+target_include_directories(run PRIVATE
     src
     ${glfw_SOURCE_DIR}/include
     ${glad_SOURCE_DIR}/include
@@ -74,7 +72,7 @@ target_include_directories(MyEngine PRIVATE
 # ----------------------------
 # Link Libraries
 # ----------------------------
-target_link_libraries(MyEngine PRIVATE
+target_link_libraries(run PRIVATE
     glfw
     glad
 )
@@ -83,7 +81,7 @@ target_link_libraries(MyEngine PRIVATE
 # Platform-specific OpenGL
 # ----------------------------
 if(UNIX AND NOT APPLE)
-    target_link_libraries(MyEngine PRIVATE
+    target_link_libraries(run PRIVATE
         dl
         pthread
         X11
@@ -99,20 +97,19 @@ elseif(APPLE)
     find_library(COREVIDEO_LIBRARY CoreVideo)
     find_library(OPENGL_LIBRARY OpenGL)
 
-    target_link_libraries(MyEngine PRIVATE
+    target_link_libraries(run PRIVATE
         ${COCOA_LIBRARY}
         ${IOKIT_LIBRARY}
         ${COREVIDEO_LIBRARY}
         ${OPENGL_LIBRARY}
     )
 elseif(WIN32)
-    target_link_libraries(MyEngine PRIVATE opengl32)
+    target_link_libraries(run PRIVATE opengl32)
 endif()
 
 # ----------------------------
 # Asset Copying
 # ----------------------------
-
 set(SHADER_SRC_DIR ${CMAKE_SOURCE_DIR}/src/renderer/shaders)
 set(SHADER_DST_DIR ${CMAKE_BINARY_DIR}/renderer/shaders)
 
@@ -135,18 +132,4 @@ add_custom_target(copy_models ALL
     COMMENT "Copying models"
 )
 
-add_dependencies(MyEngine copy_shaders copy_models)
-
-# ----------------------------
-# Convenience Run Target
-# ----------------------------
-if(UNIX)
-    add_custom_target(run
-        COMMAND ${CMAKE_COMMAND} -E remove -f ${CMAKE_BINARY_DIR}/run
-        COMMAND ${CMAKE_COMMAND} -E create_symlink
-                $<TARGET_FILE:MyEngine>
-                ${CMAKE_BINARY_DIR}/run
-        DEPENDS MyEngine
-        COMMENT "Creating ./run symlink"
-    )
-endif()
+add_dependencies(run copy_shaders copy_models)
