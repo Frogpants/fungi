@@ -128,7 +128,7 @@ void UploadTriangles(int w, int h) {
 }
 
 
-void Controls(int w, int h) {
+void Controls(GLFWwindow* window) {
     if (Input::IsDown("w")) {
         moveForward(0.1);
     }
@@ -150,16 +150,20 @@ void Controls(int w, int h) {
         camera.pos.y -= 0.1;
     }
 
-    // if (Mouse::IsPressed(0) && !Mouse::IsLocked()) {
-    //     Mouse::Lock();
-    // }
-    // if (Mouse::IsLocked()) {
-    //     camera.rot.x += Mouse::DeltaX() * 0.001;
-    //     camera.rot.y -= Mouse::DeltaY() * 0.001;
-    //     if (Input::IsPressed("esc")) {
-    //         Mouse::Unlock();
-    //     }
-    // }
+    if (Mouse::IsPressed(0) && !Mouse::IsLocked()) {
+        Mouse::Lock();
+
+        int mode;
+        glfwGetInputMode(window, GLFW_CURSOR);
+        std::cout << "Cursor mode: " << GLFW_CURSOR << std::endl;
+    }
+    if (Mouse::IsLocked()) {
+        camera.rot.x += Mouse::DeltaX() * 0.001;
+        camera.rot.y -= Mouse::DeltaY() * 0.001;
+        if (Input::IsPressed("escape")) {
+            Mouse::Unlock();
+        }
+    }
 }
 
 
@@ -196,6 +200,7 @@ int main() {
     );
 
     glfwMakeContextCurrent(window);
+    glfwFocusWindow(window);
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
     camera.pos = vec3(0.0);
@@ -235,7 +240,7 @@ int main() {
         glfwPollEvents();
         timer += deltaTime;
 
-        Controls(w, h);
+        Controls(window);
 
         Manager::Update();
 

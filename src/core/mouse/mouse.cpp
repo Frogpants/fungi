@@ -37,12 +37,12 @@ namespace {
             state.down = true;
             state.pressed = true;
 
-            // Lock and hide mouse on first left-click
             if (!mouseLocked && button == GLFW_MOUSE_BUTTON_LEFT) {
                 mouseLocked = true;
-                glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+                glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             }
-        } else if (action == GLFW_RELEASE) {
+        }
+        else if (action == GLFW_RELEASE) {
             state.down = false;
             state.released = true;
         }
@@ -52,14 +52,6 @@ namespace {
         scrollX += xoff;
         scrollY += yoff;
     }
-
-    void KeyCallback(GLFWwindow* window, int key, int, int action, int) {
-        if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS && mouseLocked) {
-            mouseLocked = false;
-            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-        }
-    }
-
 }
 
 namespace Mouse {
@@ -70,9 +62,7 @@ namespace Mouse {
         glfwSetCursorPosCallback(window, CursorPosCallback);
         glfwSetMouseButtonCallback(window, MouseButtonCallback);
         glfwSetScrollCallback(window, ScrollCallback);
-        glfwSetKeyCallback(window, KeyCallback);
 
-        // Initialize last positions
         glfwGetCursorPos(window, &lastX, &lastY);
         mouseX = lastX;
         mouseY = lastY;
@@ -114,7 +104,7 @@ namespace Mouse {
     void Lock() {
         if (g_window) {
             mouseLocked = true;
-            glfwSetInputMode(g_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+            glfwSetInputMode(g_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         }
     }
 
