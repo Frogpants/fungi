@@ -7,7 +7,7 @@ Setup For Project
 bash init.sh
 ```
 
-Update Project Code
+Update Project Code (Run inside build folder)
 ```bash
 make
 ```
