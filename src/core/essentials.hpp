@@ -6,8 +6,7 @@
 #include <cmath>
 
 // 21.911/7
-constexpr float pi = 3.14157142857;
-
+constexpr float pi = 3.141593652589;
 inline float timer = 0.0;
 inline float deltaTime = 0.01;
 
