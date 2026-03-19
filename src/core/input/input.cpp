@@ -2,7 +2,6 @@
 #include <GLFW/glfw3.h>
 #include <unordered_map>
 #include <algorithm>
-#include <iostream>
 
 namespace {
 
@@ -14,6 +13,7 @@ namespace {
 
     std::unordered_map<int, KeyState> keys;
     std::unordered_map<std::string, int> nameToKey;
+    GLFWwindow* g_window = nullptr;
 
     void RegisterKey(const std::string& name, int key) {
         std::string lower = name;
@@ -25,40 +25,41 @@ namespace {
         RegisterKey("space", GLFW_KEY_SPACE);
         RegisterKey("escape", GLFW_KEY_ESCAPE);
         RegisterKey("enter", GLFW_KEY_ENTER);
+        RegisterKey("tab", GLFW_KEY_TAB);
+        RegisterKey("shift", GLFW_KEY_LEFT_SHIFT);
+        RegisterKey("ctrl", GLFW_KEY_LEFT_CONTROL);
 
         for (char c = 'a'; c <= 'z'; ++c)
             RegisterKey(std::string(1, c), GLFW_KEY_A + (c - 'a'));
 
         for (int i = 0; i <= 9; ++i)
             RegisterKey(std::to_string(i), GLFW_KEY_0 + i);
-    }
 
-    void KeyCallback(GLFWwindow*, int key, int, int action, int) {
-        if (key < 0) return;
-
-        auto& state = keys[key];
-
-        if (action == GLFW_PRESS) {
-            state.down = true;
-            state.pressed = true;
-        } else if (action == GLFW_RELEASE) {
-            state.down = false;
-            state.released = true;
-        }
+        RegisterKey("up", GLFW_KEY_UP);
+        RegisterKey("down", GLFW_KEY_DOWN);
+        RegisterKey("left", GLFW_KEY_LEFT);
+        RegisterKey("right", GLFW_KEY_RIGHT);
     }
 }
 
 namespace Input {
 
     void Init(GLFWwindow* window) {
-        glfwSetKeyCallback(window, KeyCallback);
+        g_window = window;
         RegisterDefaults();
     }
 
     void Update() {
-        for (auto& [_, state] : keys) {
-            state.pressed = false;
-            state.released = false;
+        if (!g_window) return;
+
+        for (const auto& [_, key] : nameToKey) {
+            const int action = glfwGetKey(g_window, key);
+            const bool isDown = (action == GLFW_PRESS || action == GLFW_REPEAT);
+
+            auto& state = keys[key];
+            state.pressed = (!state.down && isDown);
+            state.released = (state.down && !isDown);
+            state.down = isDown;
         }
     }
 

@@ -8,11 +8,9 @@
 #include <iostream>
 
 #include "../core/essentials.hpp"
-#include "../renderer/render.hpp"
+#include "./mesh.hpp"
 
-struct Model {
-    std::vector<Triangle> triangles;
-};
+using Model = Mesh;
 
 inline bool LoadOBJ(
     const std::string& path,
@@ -84,19 +82,24 @@ inline bool LoadOBJ(
                 auto [vi1, ti1] = faceIndices[i];
                 auto [vi2, ti2] = faceIndices[i + 1];
 
+                if (vi0 < 0 || vi1 < 0 || vi2 < 0) {
+                    continue;
+                }
+                if (static_cast<size_t>(vi0) >= vertices.size() ||
+                    static_cast<size_t>(vi1) >= vertices.size() ||
+                    static_cast<size_t>(vi2) >= vertices.size()) {
+                    continue;
+                }
+
                 vec3 v0 = vertices[vi0] * scale + position;
                 vec3 v1 = vertices[vi1] * scale + position;
                 vec3 v2 = vertices[vi2] * scale + position;
 
-                vec2 uv0 = (ti0 >= 0 && ti0 < uvs.size()) ? uvs[ti0] : vec2(0.0f, 0.0f);
-                vec2 uv1 = (ti1 >= 0 && ti1 < uvs.size()) ? uvs[ti1] : vec2(0.0f, 0.0f);
-                vec2 uv2 = (ti2 >= 0 && ti2 < uvs.size()) ? uvs[ti2] : vec2(0.0f, 0.0f);
+                vec2 uv0 = (ti0 >= 0 && static_cast<size_t>(ti0) < uvs.size()) ? uvs[ti0] : vec2(0.0f, 0.0f);
+                vec2 uv1 = (ti1 >= 0 && static_cast<size_t>(ti1) < uvs.size()) ? uvs[ti1] : vec2(0.0f, 0.0f);
+                vec2 uv2 = (ti2 >= 0 && static_cast<size_t>(ti2) < uvs.size()) ? uvs[ti2] : vec2(0.0f, 0.0f);
 
-                outModel.triangles.push_back({
-                    {v0, uv0},
-                    {v1, uv1},
-                    {v2, uv2}
-                });
+                outModel.AddTriangle(v0, uv0, v1, uv1, v2, uv2);
             }
         }
     }
@@ -111,9 +114,9 @@ inline bool LoadOBJ(
 
 inline void AppendModelToScene(
     const Model& model,
-    std::vector<Triangle>& scene
+    Mesh& scene
 ) {
-    scene.insert(scene.end(), model.triangles.begin(), model.triangles.end());
+    scene.Append(model);
 }
 
 #endif

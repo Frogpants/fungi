@@ -1,9 +1,11 @@
+#!/bin/bash
+set -euo pipefail
+
+rm -rf dist
+rm -rf build-win
 rm -rf build
-mkdir build
+rm -rf third_party
+rm -rf src/external/include
+rm -rf src/external/src
 
-sudo apt update
-sudo apt install libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxxf86vm-dev libgl1-mesa-dev
-
-cd build
-
-cmake ..
+echo "Project reset complete."

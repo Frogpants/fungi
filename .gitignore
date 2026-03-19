@@ -1,1 +1,7 @@
 build/
+build-win/
+dist/
+third_party/
+src/external/include/
+src/external/src/
+dist/

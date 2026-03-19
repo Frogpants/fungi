@@ -16,6 +16,10 @@ void RenderFrame(const std::vector<Triangle>& tris, int width, int height) {
         vec2 p2 = ToNDC(pb, width, height);
         vec2 p3 = ToNDC(pc, width, height);
 
+        (void)p1;
+        (void)p2;
+        (void)p3;
+
         // Now you can use p1, p2, p3 for your CPU-side rasterization
     }
 }
