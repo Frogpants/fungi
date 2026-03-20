@@ -6,6 +6,8 @@
 struct Vertex {
     vec3 pos;
     vec2 uv;
+    vec3 color = vec3(1.0f, 1.0f, 1.0f);
+    float texBlend = 0.0f;
 };
 
 struct Triangle {
@@ -14,8 +16,13 @@ struct Triangle {
     Vertex c;
 };
 
-inline Vertex MakeVertex(const vec3& pos, const vec2& uv = vec2(0.0f, 0.0f)) {
-    return Vertex{pos, uv};
+inline Vertex MakeVertex(
+    const vec3& pos,
+    const vec2& uv = vec2(0.0f, 0.0f),
+    const vec3& color = vec3(1.0f, 1.0f, 1.0f),
+    float texBlend = 0.0f
+) {
+    return Vertex{pos, uv, color, texBlend};
 }
 
 inline Triangle MakeTriangle(const Vertex& a, const Vertex& b, const Vertex& c) {
@@ -28,9 +35,21 @@ inline Triangle MakeTriangle(
     const vec3& cPos, const vec2& cUv
 ) {
     return Triangle{
-        MakeVertex(aPos, aUv),
-        MakeVertex(bPos, bUv),
-        MakeVertex(cPos, cUv)
+        MakeVertex(aPos, aUv, vec3(1.0f, 1.0f, 1.0f), 1.0f),
+        MakeVertex(bPos, bUv, vec3(1.0f, 1.0f, 1.0f), 1.0f),
+        MakeVertex(cPos, cUv, vec3(1.0f, 1.0f, 1.0f), 1.0f)
+    };
+}
+
+inline Triangle MakeTriangle(
+    const vec3& aPos, const vec3& aColor,
+    const vec3& bPos, const vec3& bColor,
+    const vec3& cPos, const vec3& cColor
+) {
+    return Triangle{
+        MakeVertex(aPos, vec2(0.0f, 0.0f), aColor, 0.0f),
+        MakeVertex(bPos, vec2(0.0f, 0.0f), bColor, 0.0f),
+        MakeVertex(cPos, vec2(0.0f, 0.0f), cColor, 0.0f)
     };
 }
 
@@ -51,6 +70,14 @@ struct Mesh {
         const vec3& cPos, const vec2& cUv
     ) {
         triangles.push_back(MakeTriangle(aPos, aUv, bPos, bUv, cPos, cUv));
+    }
+
+    void AddTriangle(
+        const vec3& aPos, const vec3& aColor,
+        const vec3& bPos, const vec3& bColor,
+        const vec3& cPos, const vec3& cColor
+    ) {
+        triangles.push_back(MakeTriangle(aPos, aColor, bPos, bColor, cPos, cColor));
     }
 
     void Append(const Mesh& other) {
